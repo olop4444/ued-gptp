@@ -36,26 +36,23 @@ bool nextFrame() {
 		std::unordered_set<CUnit*> terranUnits;
 		std::unordered_set<CUnit*> shieldableUnits;
 		std::unordered_set<CUnit*> shielders;
-		int count = 0;
 		for (CUnit* unit = *firstVisibleUnit; unit; unit = unit->link.next) {
 			if (unit->id == UnitId::TerranArmory && unit->remainingBuildTime == 0) {
 				hasShieldGen[unit->getLastOwnerId()] = true;
 				shielders.insert(unit);
 			}
 			//unused terran1 = starbase = support tower
-			else if (unit->id == UnitId::UnusedTerran1 && unit->remainingBuildTime == 0) {
+			/*else if (unit->id == UnitId::UnusedTerran1 && unit->remainingBuildTime == 0) {
 				shielders.insert(unit);
-			}
+			}*/
 			else {
 				if (unit->getRace() == RaceId::Terran &&
 					units_dat::ShieldsEnabled[unit->id] != 0 &&
 					unit->shields > 0) {
 					terranUnits.insert(unit);
-					count++;
 				}
 			}
 		}
-		u32 shieldRange = 10 * 32;
 
 		for (CUnit* shielder : shielders) {
 			if (hasShieldGen[shielder->getLastOwnerId()] == true) {
@@ -91,7 +88,6 @@ bool nextFrame() {
 	}
 
 	return true;
-
 }
 
 bool gameOn() {
