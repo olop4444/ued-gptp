@@ -4,6 +4,7 @@
 #ifndef MAXINT32
 #define MAXINT32    (0xFFFFFFFF >> 1)
 #endif
+#include <algorithm>
 #ifndef MAXINT16
 #define MAXINT16    (0xFFFF >> 1)
 #endif

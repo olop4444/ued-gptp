@@ -123,7 +123,7 @@ void updateUnitStateHook(CUnit* unit) {
 		unit->spellCooldown--;
 
 	//Shield regeneration
-	if (units_dat::ShieldsEnabled[unit->id] != 0) {
+	if (units_dat::ShieldsEnabled[unit->id] != 0 && unit->getRace() != RaceId::Terran) {
 
 		s32 maxShields = (s32)(units_dat::MaxShieldPoints[unit->id]) * 256;
 
