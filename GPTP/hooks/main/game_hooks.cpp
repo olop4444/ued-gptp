@@ -37,12 +37,13 @@ bool nextFrame() {
 		std::unordered_set<CUnit*> shieldableUnits;
 		std::unordered_set<CUnit*> shielders;
 		for (CUnit* unit = *firstVisibleUnit; unit; unit = unit->link.next) {
-			if (unit->id == UnitId::TerranArmory && unit->remainingBuildTime == 0) {
+			if (unit->id == UnitId::TerranArmory && (unit->status & UnitStatus::Completed)) {
 				hasShieldGen[unit->getLastOwnerId()] = true;
 				shielders.insert(unit);
 			}
 			//unused terran1 = starbase = support tower
-			/*else if (unit->id == UnitId::UnusedTerran1 && unit->remainingBuildTime == 0) {
+			//disabled due to lag
+			/*else if (unit->id == UnitId::UnusedTerran1 && (unit->status & UnitStatus::Completed)) {
 				shielders.insert(unit);
 			}*/
 			else {
