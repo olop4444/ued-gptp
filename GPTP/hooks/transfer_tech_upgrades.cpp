@@ -17,16 +17,14 @@ struct TechTransferData {
 
 const TechTransferData techTransferData[] = {
   //Terran
-  {UnitId::marine, TechId::Stimpacks, TechId::None},
   {UnitId::firebat, TechId::Stimpacks, TechId::None},
-  {UnitId::ghost, TechId::Lockdown, TechId::PersonnelCloaking, TechId::None},
+  {UnitId::vulture, TechId::Lockdown, TechId::PersonnelCloaking, TechId::SpiderMines, TechId::None},
   {UnitId::medic, TechId::Healing, TechId::Restoration, TechId::OpticalFlare, TechId::None},
-  {UnitId::vulture, TechId::SpiderMines, TechId::None},
   {UnitId::siege_tank, TechId::TankSiegeMode, TechId::None},
   {UnitId::siege_tank_s, TechId::TankSiegeMode, TechId::None},
   {UnitId::wraith, TechId::CloakingField, TechId::None},
-  {UnitId::science_vessel, TechId::DefensiveMatrix, TechId::Irradiate, TechId::EMPShockwave, TechId::None},
   {UnitId::battlecruiser, TechId::YamatoGun, TechId::None},
+  {UnitId::sarah_kerrigan, TechId::UnusedTech26, UpgradeId::None},
 
   //Zerg
   {UnitId::queen, TechId::Infestation, TechId::Parasite, TechId::SpawnBroodlings, TechId::Ensnare, TechId::None},
@@ -53,13 +51,12 @@ struct UpgradeTransferData {
 const UpgradeTransferData upgradeTransferData[] = {
   //Terran
   {UnitId::marine, UpgradeId::U_238Shells, UpgradeId::None},
-  {UnitId::ghost, UpgradeId::OcularImplants, UpgradeId::MoebiusReactor, UpgradeId::None},
+  {UnitId::ghost, UpgradeId::OcularImplants, UpgradeId::CharonBooster, UpgradeId::None},
   {UnitId::medic, UpgradeId::CaduceusReactor, UpgradeId::None},
-  {UnitId::vulture, UpgradeId::IonThrusters, UpgradeId::None},
-  {UnitId::goliath, UpgradeId::CharonBooster, UpgradeId::None},
-  {UnitId::science_vessel, UpgradeId::TitanReactor, UpgradeId::None},
+  {UnitId::vulture, UpgradeId::MoebiusReactor, UpgradeId::None},
   {UnitId::wraith, UpgradeId::ApolloReactor, UpgradeId::None},
-  {UnitId::battlecruiser, UpgradeId::ColossusReactor, UpgradeId::None},
+  {UnitId::battlecruiser, UpgradeId::IonThrusters, UpgradeId::None},
+  {UnitId::sarah_kerrigan, UpgradeId::ColossusReactor, UpgradeId::UnusedBurstLasers, UpgradeId::None},
 
   //Zerg
   {UnitId::overlord, UpgradeId::VentralSacs, UpgradeId::Antennae, UpgradeId::None},
@@ -95,7 +92,7 @@ bool researchHelper(u32 researchTechFunc, CUnit* sourceUnit, u32 techId, u32 rel
 	__asm {
 		PUSHAD
 		PUSH destPlayerId		//[EBP+0x14]
-		PUSH relativeVariable	//[EBP+0x10] //this variable has different meaning depending on the caller (boolean or number) 
+		PUSH relativeVariable	//[EBP+0x10] //this variable has different meaning depending on the caller (boolean or number)
 		PUSH techId				//[EBP+0x0C]
 		PUSH sourceUnit			//[EBP+0x08]
 		CALL researchTechFunc
@@ -155,7 +152,7 @@ void transferUnitTechToPlayerHook(CUnit* sourceUnit, u8 targetPlayerId, u32 rese
 						//if return false, stop checking techs and TechTransferData
 						if(!researchHelper(researchTechFunc,sourceUnit,techId,bIsResearched,targetPlayerId)) {
 							bBreakSubLoop = true;
-							bBreakMainLoop = true;			
+							bBreakMainLoop = true;
 						}
 
 					}
@@ -218,7 +215,7 @@ void transferUnitUpgradesToPlayerHook(CUnit* sourceUnit, u8 targetPlayerId, u32 
 						//if return false, stop checking upgrades and UpgradeTransferData
 						if(!researchHelper(researchUpgradesFunc,sourceUnit,upgradeId,sourceUpgradeLevel,targetPlayerId)) {
 							bBreakSubLoop = true;
-							bBreakMainLoop = true;			
+							bBreakMainLoop = true;
 						}
 
 					}

@@ -42,36 +42,8 @@ namespace hooks {
 
 //Applies Irradiate effects for @p unit (which is Irradiated)
 void doIrradiateDamage(CUnit* irradiatedUnit) {
-	//Default StarCraft behavior
-
-	irradiateProc irradiation=irradiateProc(irradiatedUnit);
-
-	//No splash if burrowed
-	if (irradiatedUnit->status & UnitStatus::Burrowed) {
-		irradiation.proc(irradiatedUnit);
-	}
-	//If inside a transport, damage all units loaded within
-	else if (irradiatedUnit->status & UnitStatus::InTransport) {
-
-		CUnit* transport = irradiatedUnit->connectedUnit;
-
-		if (transport != NULL) {
-			for (int i = 0; i < units_dat::SpaceProvided[transport->id]; ++i) {
-				CUnit* loadedUnit = transport->getLoadedUnit(i);
-				if (loadedUnit)
-			irradiation.proc(loadedUnit);
-			}
-		}
-
-	}
-	//Find and iterate nearby units
-	else {
-		scbw::UnitFinder unitFinder(irradiatedUnit->getX() - 160,
-									irradiatedUnit->getY() - 160,
-									irradiatedUnit->getX() + 160,
-									irradiatedUnit->getY() + 160);
-		unitFinder.forEach(irradiation);
-	}
+	const s32 damage = weapons_dat::DamageAmount[WeaponId::Irradiate] * 256 / weapons_dat::Cooldown[WeaponId::Irradiate];
+	irradiatedUnit->damageWith(damage, WeaponId::Irradiate, irradiatedUnit->irradiatedBy, irradiatedUnit->irradiatePlayerId);
 }
 
 //Hook function for UpdateStatusEffects() (AKA RestoreAllUnitStats())
@@ -188,7 +160,7 @@ void updateStatusEffects(CUnit* unit) {
 
 	//hardcoding effect of unreferenced_sub_4F42C0 @ 0x004F42C0
 	u8 previousAcidSporeCount = unit->acidSporeCount;
-	
+
 	for (int i = 0; i <= 8; ++i) {
 
 		if (unit->acidSporeTime[i] != 0) {

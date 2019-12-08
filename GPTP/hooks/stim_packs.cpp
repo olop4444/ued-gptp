@@ -12,7 +12,8 @@ u32 RandBetween(u32 min, u32 max, u32 someIndex);					//0x004DC550
 
 namespace hooks {
 
-const int MIN_HITPOINTS_FOR_STIMPACKS = 2560;
+const int MIN_HITPOINTS_FOR_STIMPACKS = 5120;
+const int STIMPACK_TIMER = 30;
 
 //Equivalent to original code, only doubt is QueueGameCommand
 //Local answer when using stimpacks (check units of selection,
@@ -31,9 +32,9 @@ void CMDACT_Stimpack() {
 		currentClientSelectionUnit = clientSelectionGroup->unit[i];
 
 		if(
-			currentClientSelectionUnit != NULL && 
+			currentClientSelectionUnit != NULL &&
 			currentClientSelectionUnit->hitPoints > MIN_HITPOINTS_FOR_STIMPACKS
-		) 
+		)
 			bFoundUnitAbleToStimpack = true;
 
 	}
@@ -58,14 +59,14 @@ void useStimPacksAIHook(CUnit* unit) {
 	if (unit->hitPoints > MIN_HITPOINTS_FOR_STIMPACKS) {
 
 		scbw::playSound(
-			RandBetween(SoundId::Terran_MARINE_TMaSti00_WAV, SoundId::Terran_MARINE_TMaSti01_WAV,31), 
+			RandBetween(SoundId::Terran_MARINE_TMaSti00_WAV, SoundId::Terran_MARINE_TMaSti01_WAV,31),
 			unit
 		);
 
 		unit->damageHp(MIN_HITPOINTS_FOR_STIMPACKS,NULL,-1,true);
 
-		if (unit->stimTimer < 37) {
-			unit->stimTimer = 37;
+		if (unit->stimTimer < STIMPACK_TIMER) {
+			unit->stimTimer = STIMPACK_TIMER;
 			unit->updateSpeed();
 		}
 
@@ -95,7 +96,7 @@ void CMDRECV_StimPack() {
 		{
 
 			int random_value;
-			
+
 			if(!*IS_IN_GAME_LOOP)
 				random_value = 0;
 			else {
@@ -118,15 +119,15 @@ void CMDRECV_StimPack() {
 
 			activePlayerCurrentSelection->damageHp(MIN_HITPOINTS_FOR_STIMPACKS,NULL,-1,true);
 
-			if (activePlayerCurrentSelection->stimTimer < 37) {
-				activePlayerCurrentSelection->stimTimer = 37;
+			if (activePlayerCurrentSelection->stimTimer < STIMPACK_TIMER) {
+				activePlayerCurrentSelection->stimTimer = STIMPACK_TIMER;
 				activePlayerCurrentSelection->updateSpeed();
 			}
 
 
 		}
 
-		activePlayerCurrentSelection = getActivePlayerNextSelection(); 
+		activePlayerCurrentSelection = getActivePlayerNextSelection();
 
 	}
 
