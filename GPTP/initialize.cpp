@@ -181,7 +181,7 @@ BOOL WINAPI Plugin::InitializePlugin(IMPQDraftServer *lpMPQDraftServer) {
 
 	//hooks::injectArmorBonusHook();
 	//hooks::injectSightRangeHook();
-	//hooks::injectUnitMaxEnergyHook();
+	hooks::injectUnitMaxEnergyHook();
 	//hooks::injectWeaponRangeHooks();
 
 	//hooks::injectUnitTooltipHook();

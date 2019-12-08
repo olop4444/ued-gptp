@@ -233,14 +233,14 @@ void orders_Spell(CUnit* unit) {
 								unit->mainOrderId = OrderId::Nothing2;
 								target->defensiveMatrixHp = 64000;
 								if (target->defensiveMatrixTimer == 0) {
-									u32 frontId = units_dat::SizeType[target->id] <= 1 ?
-										ImageId::DefensiveMatrixFront_Small :
-										(units_dat::SizeType[target->id] == 2 ?
-											ImageId::DefensiveMatrixFront_Medium : ImageId::DefensiveMatrixFront_Large);
-									u32 backId = units_dat::SizeType[target->id] <= 1 ?
-										ImageId::DefensiveMatrixBack_Small :
-										(units_dat::SizeType[target->id] == 2 ?
-											ImageId::DefensiveMatrixBack_Medium : ImageId::DefensiveMatrixBack_Large);
+									u32 frontId = (units_dat::BaseProperty[target->id] & UnitProperty::MediumOverlay) ?
+										ImageId::DefensiveMatrixFront_Medium :
+										(units_dat::BaseProperty[target->id] & UnitProperty::LargeOverlay ?
+											ImageId::DefensiveMatrixFront_Large : ImageId::DefensiveMatrixFront_Small);
+									u32 backId = (units_dat::BaseProperty[target->id] & UnitProperty::MediumOverlay) ?
+										ImageId::DefensiveMatrixBack_Medium :
+										(units_dat::BaseProperty[target->id] & UnitProperty::LargeOverlay ?
+											ImageId::DefensiveMatrixBack_Large : ImageId::DefensiveMatrixBack_Small);
 									target->sprite->createTopOverlay(frontId, 0, 0, 0);
 									if (target->subunit)
 										target->subunit->sprite->createTopOverlay(frontId, 0, 0, 0);
