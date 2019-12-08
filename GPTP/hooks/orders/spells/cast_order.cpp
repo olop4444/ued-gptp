@@ -56,7 +56,7 @@ void orders_Spell(CUnit* unit) {
 		if(!canCastSpell_0(unit)) {
 
 			char* message = (char*)statTxtTbl->getString(876); //Invalid Target
-			
+
 			//do the actual transmission corresponding to the message
 			get_statTxt_Str_0(unit,unit->playerId,message);
 
@@ -68,6 +68,9 @@ void orders_Spell(CUnit* unit) {
 		else { //9291A
 
 			u8 techUsed = orders_dat::TechUsed[unit->mainOrderId];
+			if (unit->id == UnitId::UnusedTerran1 && techUsed == 7) { // 7 is Irradiate
+				techUsed = TechId::DefensiveMatrix;
+			}
 
 			if(techUsed >= TechId::None)
 				spellCost = 0;
@@ -137,7 +140,7 @@ void orders_Spell(CUnit* unit) {
 						function_00476640(unit,orderWeaponId) && //is ready to fire weapon (angle,range...) maybe?
 						!(unit->movementFlags & MovementFlags::Accelerating) &&
 						unit->getMovableState() != 0
-					) 
+					)
 					{ //92A38
 
 						bool bStopHere = false;
@@ -147,13 +150,13 @@ void orders_Spell(CUnit* unit) {
 						target = unit->orderTarget.unit;
 
 						if(unit->pAI != NULL && target != NULL) {
-							
+
 							if(orderWeaponId <= WeaponId::Maelstrom) { //Maelstrom is the last spell-related weapon
 
 								//array bound to the function
 								const u8* const array_00492B44 = (u8*)(0x00492B44);
 
-								//this code would not work for weapons id of NuclearMissile, YamatoGun 
+								//this code would not work for weapons id of NuclearMissile, YamatoGun
 								//and weapons id before those, they must be excluded somewhere else
 								//Maybe the switch and array use could be removed in a future version
 								//since enough elements use default value (switch 6)
@@ -226,6 +229,28 @@ void orders_Spell(CUnit* unit) {
 							if(unit->pAI != NULL)
 								AIScriptController[unit->playerId].spellcasterTimer = 1;
 
+							if (unit->id == UnitId::UnusedTerran1 && techUsed == TechId::DefensiveMatrix) {
+								unit->mainOrderId = OrderId::Nothing2;
+								target->defensiveMatrixHp = 64000;
+								if (target->defensiveMatrixTimer == 0) {
+									u32 frontId = units_dat::SizeType[target->id] <= 1 ?
+										ImageId::DefensiveMatrixFront_Small :
+										(units_dat::SizeType[target->id] == 2 ?
+											ImageId::DefensiveMatrixFront_Medium : ImageId::DefensiveMatrixFront_Large);
+									u32 backId = units_dat::SizeType[target->id] <= 1 ?
+										ImageId::DefensiveMatrixBack_Small :
+										(units_dat::SizeType[target->id] == 2 ?
+											ImageId::DefensiveMatrixBack_Medium : ImageId::DefensiveMatrixBack_Large);
+									target->sprite->createTopOverlay(frontId, 0, 0, 0);
+									if (target->subunit)
+										target->subunit->sprite->createTopOverlay(frontId, 0, 0, 0);
+									target->sprite->createOverlay(backId, 0, 0, 0);
+									if (target->subunit)
+										target->subunit->sprite->createTopOverlay(backId, 0, 0, 0);
+								}
+								target->defensiveMatrixTimer = 168;
+								scbw::playSound(SoundId::Bullet_tscFir00_wav, unit);
+							}
 						}
 
 					}

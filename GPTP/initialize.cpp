@@ -120,7 +120,7 @@ BOOL WINAPI Plugin::InitializePlugin(IMPQDraftServer *lpMPQDraftServer) {
 	//hooks::injectStopHoldPosOrdersHooks();
 	//hooks::injectRecallSpellHooks();
 	//hooks::injectEnterNydusHooks();
-	//hooks::injectCastOrderHooks();
+	hooks::injectCastOrderHooks();
 	//hooks::injectWpnSpellHitHooks();
 	//hooks::injectBuildingMorphHooks();
 	//hooks::injectMakeNydusExitHook();
