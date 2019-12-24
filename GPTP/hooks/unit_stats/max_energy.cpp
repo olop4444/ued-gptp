@@ -16,7 +16,7 @@ u16 getUnitMaxEnergyHook(CUnit* const unit) {
 		return ENERGY_INGAME_250;
 
 	switch (unit->id) {
-		case UnitId::UnusedTerran1:
+		case UnitId::TerranStarbase:
 			if (scbw::getUpgradeLevel(unit->playerId, UpgradeId::TitanReactor))
 				return ENERGY_INGAME_250;
 			break;

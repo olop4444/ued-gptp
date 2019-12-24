@@ -288,7 +288,7 @@ enum Enum {
 /*0x74*/	TerranScienceFacility           = 116,
 /*0x75*/	TerranCovertOps                 = 117,
 /*0x76*/	TerranPhysicsLab                = 118,
-/*0x77*/	UnusedTerran1                   = 119,
+/*0x77*/	TerranStarbase                  = 119,
 /*0x78*/	TerranMachineShop               = 120,
 /*0x79*/	UnusedTerran2                   = 121,
 /*0x7A*/	TerranEngineeringBay            = 122,
@@ -403,7 +403,7 @@ enum Enum {
 /*0xE7*/	Buildings                       = 231,
 /*0xE8*/	Factories                       = 232,
 /*0xE9*/	TrigMax                         = 233,
-  
+
   //Buttonsets using unitid beyond Unit::None
 
 /*0xE4*/	Buttons_Blank = 228,
@@ -428,6 +428,6 @@ enum Enum {
 /*0xF7*/	Buttons_GroupBurrower = 247,
 /*0xF8*/	Buttons_ReplayPaused = 248,
 /*0xF9*/	Buttons_ReplayPlaying = 249
-  
+
 };
 }

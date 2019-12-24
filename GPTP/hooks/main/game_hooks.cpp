@@ -6,6 +6,7 @@
 #include "../psi_field.h"
 #include <cstdio>
 #include <unordered_set>
+#include <algorithm>
 
 //Helper functions
 namespace {
@@ -36,18 +37,17 @@ bool nextFrame() {
 		std::unordered_set<CUnit*> terranUnits;
 		std::unordered_set<CUnit*> shielders;
 		for (CUnit* unit = *firstVisibleUnit; unit; unit = unit->link.next) {
-			if (*elapsedTimeFrames % 8 == 0) {
+			//support tower needs to use the field for shield aura
+			if (*elapsedTimeFrames % 8 == 0 && unit->id != UnitId::TerranStarbase) {
 				unit->unusedTimer = 0;
 			}
 			if (unit->id == UnitId::TerranArmory && (unit->status & UnitStatus::Completed)) {
 				hasShieldGen[unit->getLastOwnerId()] = true;
 				shielders.insert(unit);
 			}
-			//unused terran1 = starbase = support tower
-			//disabled due to lag
-			/*else if (unit->id == UnitId::UnusedTerran1 && (unit->status & UnitStatus::Completed)) {
+			else if (unit->id == UnitId::TerranStarbase && (unit->status & UnitStatus::Completed)) {
 				shielders.insert(unit);
-			}*/
+			}
 			else {
 				if (unit->getRace() == RaceId::Terran &&
 					units_dat::ShieldsEnabled[unit->id] != 0 &&
@@ -96,6 +96,13 @@ namespace {
 		static u16* const maxBoxBottomValue = (u16*)0x006284B4;	//should usually be mapTileSize->height * 32
 		static u32 shieldRadius = 8 * 32;
 
+		if (shielder->unusedTimer > 0) {
+			shielder->unusedTimer = 10; //base energy cost same as cloaking
+			if (*elapsedTimeFrames % 72 == 0) { // every 3 seconds at fastest
+				scbw::playSound(SoundId::Bullet_pshield_wav, shielder);
+			}
+		}
+
 		Box16 area_of_effect;
 
 		CUnit** unitsInAreaOfEffect;
@@ -124,8 +131,18 @@ namespace {
 		while (current_unit != NULL) {
 			if (current_unit->getRace() == RaceId::Terran &&
 				units_dat::ShieldsEnabled[current_unit->id] != 0 &&
-				current_unit->getLastOwnerId() == shielder->getLastOwnerId()) {
-				current_unit->unusedTimer = 1;
+				current_unit->getLastOwnerId() == shielder->getLastOwnerId())
+			{
+				current_unit->unusedTimer = std::max(current_unit->unusedTimer, (u8)7);
+
+				if (shielder->unusedTimer > 0) {
+					current_unit->unusedTimer += 14;
+
+					s32 maxShields = (s32)(units_dat::MaxShieldPoints[current_unit->id]) * 256;
+					if (current_unit->shields != maxShields) {
+						shielder->unusedTimer += 10; // 1 energy : 1.4 shield point
+					}
+				}
 			}
 			unitsInAreaOfEffect++;
 			current_unit = *unitsInAreaOfEffect;

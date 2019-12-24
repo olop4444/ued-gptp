@@ -31,7 +31,7 @@ enum Enum {
   ArchonWarp        = 0x17, // (default)
   Restoration       = 0x18,
   DisruptionWeb     = 0x19,
-  UnusedTech26      = 0x1A, // (unused)
+  RpgLauncher       = 0x1A, // (unused)
   MindControl       = 0x1B,
   DarkArchonMeld    = 0x1C, // (default)
   Feedback          = 0x1D, // (default)
@@ -40,7 +40,7 @@ enum Enum {
   LurkerAspect      = 0x20,
   UnusedTech33      = 0x21, // (default; possibly liftoff)
   Healing           = 0x22, // (default)
-  UnusedTech35      = 0x23, // (unused)
+  ShieldAura        = 0x23, // (unused)
   UnusedTech36      = 0x24, // (unused)
   UnusedTech37      = 0x25, // (unused)
   UnusedTech38      = 0x26, // (unused)
@@ -91,7 +91,7 @@ namespace BwTech {
 enum Enum {
   Restoration       = 0,
   DisruptionWeb     = 1,
-  UnusedTech26      = 2, // (unused)
+  RpgLauncher       = 2, // (unused)
   MindControl       = 3,
   DarkArchonMeld    = 4, // (default)
   Feedback          = 5, // (default)
@@ -100,7 +100,7 @@ enum Enum {
   LurkerAspect      = 8,
   UnusedTech33      = 9, // (default; possibly liftoff)
   Healing           = 10, // (default)
-  UnusedTech35      = 11, // (unused)
+  ShieldAura        = 11, // (unused)
   UnusedTech36      = 12, // (unused)
   UnusedTech37      = 13, // (unused)
   UnusedTech38      = 14, // (unused)

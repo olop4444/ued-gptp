@@ -24,7 +24,7 @@ const TechTransferData techTransferData[] = {
   {UnitId::siege_tank_s, TechId::TankSiegeMode, TechId::None},
   {UnitId::wraith, TechId::CloakingField, TechId::None},
   {UnitId::battlecruiser, TechId::YamatoGun, TechId::None},
-  {UnitId::sarah_kerrigan, TechId::UnusedTech26, UpgradeId::None},
+  {UnitId::sarah_kerrigan, TechId::RpgLauncher, UpgradeId::None},
 
   //Zerg
   {UnitId::queen, TechId::Infestation, TechId::Parasite, TechId::SpawnBroodlings, TechId::Ensnare, TechId::None},

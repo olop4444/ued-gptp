@@ -166,7 +166,7 @@ BOOL WINAPI Plugin::InitializePlugin(IMPQDraftServer *lpMPQDraftServer) {
 	//hooks::injectRallyHooks();
 	//hooks::injectRechargeShieldsHooks();
 	//hooks::injectSpiderMineHooks();
-	//hooks::injectStimPacksHooks();
+	hooks::injectStimPacksHooks();
 	//hooks::injectTechTargetCheckHooks();
 	hooks::injectTransferTechAndUpgradesHooks();
 	//hooks::injectUnitSpeedHooks();

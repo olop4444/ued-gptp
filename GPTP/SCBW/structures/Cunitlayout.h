@@ -52,7 +52,7 @@ struct CUnitLayout {
 /*0x023*/ u8        velocityDirection1;	  /**< This usually only differs from the currentDirection field for units that can accelerate
 											* and travel in a different direction than they are facing. For example Mutalisks can change
 											* the direction they are facing faster than then can change the direction they are moving.
-											*/	
+											*/
 /*0x024*/ u16       flingyId;
 /*0x026*/ u8        _unknown_0x026;
 /*0x027*/ u8        flingyMovementType;
@@ -177,7 +177,7 @@ struct CUnitLayout {
 /*0x0D2*/         u8        resourceIscript;
 /*0x0D3*/         u8        gatherQueueCount;
 /*0x0D4*/         CUnit*    nextGatherer;   // pointer to the next worker unit waiting in line to gather
-/*0x0D8*/         u8        resourceGroup;  
+/*0x0D8*/         u8        resourceGroup;
 /*0x0D9*/         u8        resourceBelongsToAI;
                 } resource;  /** When the unit is resource container */
 /*0x0D0*/       CUnit*    nydusExit; /** connected nydus canal */
@@ -240,6 +240,9 @@ struct CUnitLayout {
 /*0x123*/ u8        isBlind;			// is bool in BWAPI
 /*0x124*/ u8        maelstromTimer;
 /*0x125*/ u8        unusedTimer;        // ?? Might be afterburner timer or ultralisk roar timer
+                                        // ^repurposed for tracking which terran units should gain shields this cycle and how much
+                                        // since support tower cannot gain shields, doubles as boolean for if shielding aura is active
+                                        // as well as how much energy is being drained per frame
 /*0x126*/ u8        acidSporeCount;
 /*0x127*/ u8        acidSporeTime[9];
 /*0x130*/ u16       offsetIndex3by3;    // Cycles between 0-12 for each bullet fired by this unit (if it uses a "Attack 3x3 area" weapon)

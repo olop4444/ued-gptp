@@ -66,6 +66,17 @@ void updateUnitEnergy(CUnit* unit) {
 				unit->spendUnitEnergy(cloakingEnergyCost);
 
 		}
+		//if shield aura is active
+		else if (unit->id == UnitId::TerranStarbase && unit->unusedTimer > 0) {
+			u16 shieldingEnergyCost = unit->unusedTimer;
+			if (!(unit->hasEnergy(shieldingEnergyCost))) {
+				unit->unusedTimer = 0;
+				unit->sprite->removeOverlay(ImageId::RechargeShields_Medium);
+			}
+			else {
+				unit->spendUnitEnergy(shieldingEnergyCost);
+			}
+		}
 		else { //EB526
 
 			int maxEnergy;
@@ -123,13 +134,18 @@ void updateUnitStateHook(CUnit* unit) {
 		unit->spellCooldown--;
 
 	//Shield regeneration
-	if (units_dat::ShieldsEnabled[unit->id] != 0 && (unit->getRace() != RaceId::Terran || unit->unusedTimer == 1)) {
+	if (units_dat::ShieldsEnabled[unit->id] != 0 && (unit->getRace() != RaceId::Terran || unit->unusedTimer > 0)) {
 
 		s32 maxShields = (s32)(units_dat::MaxShieldPoints[unit->id]) * 256;
 
 		if (unit->shields != maxShields) {
 
-			unit->shields += 7;
+			if (unit->unusedTimer > 0) {
+				unit->shields += unit->unusedTimer;
+			}
+			else {
+				unit->shields += 7;
+			}
 
 			if (unit->shields > maxShields)
 				unit->shields = maxShields;

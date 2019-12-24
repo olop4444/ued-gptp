@@ -10,6 +10,7 @@ u32 RandBetween(u32 min, u32 max, u32 someIndex);					//0x004DC550
 
 } //unnamed namespace
 
+// Also being used to hack shield aura for support tower
 namespace hooks {
 
 const int MIN_HITPOINTS_FOR_STIMPACKS = 5120;
@@ -24,7 +25,6 @@ void CMDACT_Stimpack() {
 	CUnit* currentClientSelectionUnit;
 	bool bFoundUnitAbleToStimpack = false;
 
-
 	//original code used pointer comparison with clientSelectionGroupEnd
 	//and incrementing a pointer starting at clientSelectionGroup
 	for(int i = 0; i < SELECTION_ARRAY_LENGTH && !bFoundUnitAbleToStimpack; i++) {
@@ -33,7 +33,8 @@ void CMDACT_Stimpack() {
 
 		if(
 			currentClientSelectionUnit != NULL &&
-			currentClientSelectionUnit->hitPoints > MIN_HITPOINTS_FOR_STIMPACKS
+			(currentClientSelectionUnit->hitPoints > MIN_HITPOINTS_FOR_STIMPACKS ||
+			 currentClientSelectionUnit->id == UnitId::TerranStarbase)
 		)
 			bFoundUnitAbleToStimpack = true;
 
@@ -89,7 +90,19 @@ void CMDRECV_StimPack() {
 
 	while(activePlayerCurrentSelection != NULL) {
 
-		if(
+		if (activePlayerCurrentSelection->canUseTech(TechId::ShieldAura, *ACTIVE_NATION_ID) == 1 &&
+			activePlayerCurrentSelection->id == UnitId::TerranStarbase) {
+			if (activePlayerCurrentSelection->unusedTimer > 0) {
+				activePlayerCurrentSelection->unusedTimer = 0;
+				activePlayerCurrentSelection->sprite->removeOverlay(ImageId::RechargeShields_Medium);
+			}
+			else {
+				activePlayerCurrentSelection->unusedTimer = 1;
+				activePlayerCurrentSelection->sprite->createOverlay(ImageId::RechargeShields_Medium, 0, 0, 0);
+			}
+		}
+
+		else if (
 			activePlayerCurrentSelection->canUseTech(TechId::Stimpacks,*ACTIVE_NATION_ID) == 1 &&
 			activePlayerCurrentSelection->hitPoints > MIN_HITPOINTS_FOR_STIMPACKS
 		)
