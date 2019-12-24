@@ -9,7 +9,7 @@
 
 //Helper functions
 namespace {
-	void getShieldableUnits(CUnit* shielder, std::unordered_set<CUnit*>* shieldableUnits);
+	void getShieldableUnits(CUnit* shielder);
 	void setAllImageGroupFlagsPal11(CSprite* sprite);		//0x00497430
 	CUnit** getAllUnitsInBounds(Box16* coords);		//0x0042FF80
 } //unnamed namespace
@@ -34,9 +34,11 @@ bool nextFrame() {
 		//Loop through all visible units in the game.
 		bool hasShieldGen[12] = { 0 };
 		std::unordered_set<CUnit*> terranUnits;
-		std::unordered_set<CUnit*> shieldableUnits;
 		std::unordered_set<CUnit*> shielders;
 		for (CUnit* unit = *firstVisibleUnit; unit; unit = unit->link.next) {
+			if (*elapsedTimeFrames % 8 == 0) {
+				unit->unusedTimer = 0;
+			}
 			if (unit->id == UnitId::TerranArmory && (unit->status & UnitStatus::Completed)) {
 				hasShieldGen[unit->getLastOwnerId()] = true;
 				shielders.insert(unit);
@@ -54,24 +56,11 @@ bool nextFrame() {
 				}
 			}
 		}
-
-		for (CUnit* shielder : shielders) {
-			if (hasShieldGen[shielder->getLastOwnerId()] == true) {
-				getShieldableUnits(shielder, &shieldableUnits);
-			}
-		}
-		for (CUnit* unit : shieldableUnits) {
-			s32 maxShields = (s32)(units_dat::MaxShieldPoints[unit->id]) * 256;
-
-			if (unit->shields != maxShields) {
-
-				unit->shields += 7;
-
-				if (unit->shields > maxShields)
-					unit->shields = maxShields;
-
-				if (unit->sprite->flags & CSprite_Flags::Selected)  //If the unit is currently selected, redraw its graphics
-					setAllImageGroupFlagsPal11(unit->sprite);
+		if (*elapsedTimeFrames % 8 == 0) {
+			for (CUnit* shielder : shielders) {
+				if (hasShieldGen[shielder->getLastOwnerId()] == true) {
+					getShieldableUnits(shielder);
+				}
 			}
 		}
 
@@ -102,9 +91,10 @@ bool gameEnd() {
 } //hooks
 
 namespace {
-	void getShieldableUnits(CUnit* shielder, std::unordered_set<CUnit*>* shieldableUnits) {
+	void getShieldableUnits(CUnit* shielder) {
 		static u16* const maxBoxRightValue = (u16*)0x00628450;	//should usually be mapTileSize->width * 32
 		static u16* const maxBoxBottomValue = (u16*)0x006284B4;	//should usually be mapTileSize->height * 32
+		static u32 shieldRadius = 8 * 32;
 
 		Box16 area_of_effect;
 
@@ -112,7 +102,6 @@ namespace {
 		CUnit* current_unit;
 
 		//Range of 8
-		u32 shieldRadius = 8 * 32;
 
 		area_of_effect.left = shielder->sprite->position.x - shieldRadius;
 		area_of_effect.right = shielder->sprite->position.x + shieldRadius;
@@ -136,7 +125,7 @@ namespace {
 			if (current_unit->getRace() == RaceId::Terran &&
 				units_dat::ShieldsEnabled[current_unit->id] != 0 &&
 				current_unit->getLastOwnerId() == shielder->getLastOwnerId()) {
-				shieldableUnits->insert(current_unit);
+				current_unit->unusedTimer = 1;
 			}
 			unitsInAreaOfEffect++;
 			current_unit = *unitsInAreaOfEffect;

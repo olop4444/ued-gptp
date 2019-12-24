@@ -44,7 +44,7 @@ void updateUnitEnergy(CUnit* unit) {
 				unit->id == UnitId::Hero_AlexeiStukov
 			)
 				cloakingEnergyCost = 10;
-			else 
+			else
 			if (unit->id == UnitId::TerranWraith ||
 				unit->id == UnitId::Hero_TomKazansky
 			)
@@ -104,7 +104,7 @@ void updateUnitEnergy(CUnit* unit) {
 
 	}
 
-} 
+}
 
 ;
 
@@ -123,7 +123,7 @@ void updateUnitStateHook(CUnit* unit) {
 		unit->spellCooldown--;
 
 	//Shield regeneration
-	if (units_dat::ShieldsEnabled[unit->id] != 0 && unit->getRace() != RaceId::Terran) {
+	if (units_dat::ShieldsEnabled[unit->id] != 0 && (unit->getRace() != RaceId::Terran || unit->unusedTimer == 1)) {
 
 		s32 maxShields = (s32)(units_dat::MaxShieldPoints[unit->id]) * 256;
 
@@ -206,7 +206,7 @@ void updateUnitStateHook(CUnit* unit) {
 			)
 
 				//Check if the unit is a grounded or lifted building
-				if (	
+				if (
 					unit->status & UnitStatus::GroundedBuilding ||
 					units_dat::BaseProperty[unit->id] & UnitProperty::FlyingBuilding)
 				{
@@ -269,7 +269,7 @@ void RestoreAllUnitStats(CUnit* unit) {
 void setAllImageGroupFlagsPal11(CSprite* sprite) {
 
 	for(
-		CImage* current_image = sprite->images.head; 
+		CImage* current_image = sprite->images.head;
 		current_image != NULL;
 		current_image = current_image->link.next
 	)
