@@ -24,7 +24,7 @@ const TechTransferData techTransferData[] = {
   {UnitId::siege_tank_s, TechId::TankSiegeMode, TechId::None},
   {UnitId::wraith, TechId::CloakingField, TechId::None},
   {UnitId::battlecruiser, TechId::YamatoGun, TechId::None},
-  {UnitId::sarah_kerrigan, TechId::RpgLauncher, UpgradeId::None},
+  {UnitId::sarah_kerrigan, TechId::RpgLauncher, TechId::None},
 
   //Zerg
   {UnitId::queen, TechId::Infestation, TechId::Parasite, TechId::SpawnBroodlings, TechId::Ensnare, TechId::None},
@@ -55,6 +55,7 @@ const UpgradeTransferData upgradeTransferData[] = {
   {UnitId::medic, UpgradeId::CaduceusReactor, UpgradeId::None},
   {UnitId::vulture, UpgradeId::MoebiusReactor, UpgradeId::None},
   {UnitId::wraith, UpgradeId::ApolloReactor, UpgradeId::None},
+  {UnitId::goliath, UpgradeId::AegisProtection, UpgradeId::None},
   {UnitId::battlecruiser, UpgradeId::IonThrusters, UpgradeId::None},
   {UnitId::sarah_kerrigan, UpgradeId::ColossusReactor, UpgradeId::UnusedBurstLasers, UpgradeId::None},
 

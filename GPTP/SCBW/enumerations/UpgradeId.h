@@ -50,7 +50,7 @@ enum Enum {
   GraviticThrusters     = 0x2A,
   CarrierCapacity       = 0x2B,
   KhaydarinCore         = 0x2C, // (Arbiter +50)
-  UnusedUpgrade45       = 0x2D,
+  AegisProtection       = 0x2D,
   UnusedUpgrade46       = 0x2E,
   ArgusJewel            = 0x2F, // (Corsair +50)
   UnusedUpgrade48       = 0x30,
@@ -118,7 +118,7 @@ enum Enum {
   GraviticThrusters     = 42,
   CarrierCapacity       = 43,
   KhaydarinCore         = 44, // (Arbiter +50)
-  UnusedUpgrade45       = 45,
+  AegisProtection       = 45,
 };
 }
 

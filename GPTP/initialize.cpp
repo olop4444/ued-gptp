@@ -170,10 +170,10 @@ BOOL WINAPI Plugin::InitializePlugin(IMPQDraftServer *lpMPQDraftServer) {
 	//hooks::injectTechTargetCheckHooks();
 	hooks::injectTransferTechAndUpgradesHooks();
 	//hooks::injectUnitSpeedHooks();
-	//hooks::injectUpdateStatusEffects();
+	hooks::injectUpdateStatusEffects();
 	hooks::injectUpdateUnitState();
 	//hooks::injectWeaponCooldownHook();
-	//hooks::injectWeaponDamageHook();
+	hooks::injectWeaponDamageHook();
 	//hooks::injectWeaponFireHooks();
 
 	//hooks::injectUnitDestructorSpecial();

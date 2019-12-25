@@ -84,8 +84,18 @@ void updateStatusEffects(CUnit* unit) {
 
 		unit->defensiveMatrixTimer--;
 
-		if (unit->defensiveMatrixTimer == 0)
-			unit->reduceDefensiveMatrixHp(unit->defensiveMatrixHp);
+		if (unit->defensiveMatrixTimer == 0) {
+			if (unit->id == UnitId::TerranGoliath &&
+				UpgradesSc->currentLevel[unit->playerId][ScUpgrade::AegisProtection] == 1)
+			{
+				unit->reduceDefensiveMatrixHp(unit->defensiveMatrixHp - unit->_unused_0x106);
+				if (unit->defensiveMatrixHp > 0)
+					unit->defensiveMatrixTimer = 168;
+			}
+			else {
+				unit->reduceDefensiveMatrixHp(unit->defensiveMatrixHp);
+			}
+		}
 
 	}
 

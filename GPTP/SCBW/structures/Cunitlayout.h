@@ -219,8 +219,8 @@ struct CUnitLayout {
 /*0x100*/ void*     path;						//use BW::Path* in BWAPI
 /*0x104*/ u8        pathingCollisionInterval;  // unknown
 /*0x105*/ u8        pathingFlags;       // 0x01 = uses pathing; 0x02 = ?; 0x04 = ?
-/*0x106*/ u8        _unused_0x106;
-/*0x107*/ Bool8      isBeingHealed;		// 1 if a medic is currently healing this unit
+/*0x106*/ u8        _unused_0x106;      //Repurposed for Titan (Goliath) passive dmatrix (Aegis Protection) shield count
+/*0x107*/ Bool8     isBeingHealed;      // 1 if a medic is currently healing this unit
 /*0x108*/ Box16     contourBounds;      // A rect that specifies the closest contour (collision) points
 
 /*0x110*/ s16       removeTimer;        // Hallucination, Dark Swarm, Disruption Web, Broodling (but not Scanner Sweep according to BWAPI)
@@ -246,7 +246,7 @@ struct CUnitLayout {
 /*0x126*/ u8        acidSporeCount;
 /*0x127*/ u8        acidSporeTime[9];
 /*0x130*/ u16       offsetIndex3by3;    // Cycles between 0-12 for each bullet fired by this unit (if it uses a "Attack 3x3 area" weapon)
-/*0x132*/ u16       _padding_0x132;
+/*0x132*/ u16       _padding_0x132;     // Repurposed for Titan (Goliath) passive dmatrix (Aegis Protection) shield timer
 /*0x134*/ void*     pAI;
 /*0x138*/ u16       airStrength;
 /*0x13A*/ u16       groundStrength;

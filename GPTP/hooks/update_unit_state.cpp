@@ -68,7 +68,7 @@ void updateUnitEnergy(CUnit* unit) {
 		}
 		//if shield aura is active
 		else if (unit->id == UnitId::TerranStarbase && unit->unusedTimer > 0) {
-			u16 shieldingEnergyCost = unit->unusedTimer;
+			u16 shieldingEnergyCost = unit->unusedTimer * 10;
 			if (!(unit->hasEnergy(shieldingEnergyCost))) {
 				unit->unusedTimer = 0;
 				unit->sprite->removeOverlay(ImageId::RechargeShields_Medium);

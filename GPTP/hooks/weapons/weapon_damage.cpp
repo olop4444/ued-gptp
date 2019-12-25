@@ -31,7 +31,7 @@ void weaponDamageHook(	s32		damage,
 						u8		attackingPlayerId,
 						s8		direction,
 						u8		dmgDivisor
-						) 
+						)
 {
 
 	//the unit must neither be already dead nor invincible
@@ -53,18 +53,11 @@ void weaponDamageHook(	s32		damage,
 
 		//Reduce Defensive Matrix
 		if (target->defensiveMatrixHp != 0) {
-
-			s32 d_matrix_reduceAmount;
-
-			if(target->defensiveMatrixHp > damage)
-				d_matrix_reduceAmount = damage;
-			else
-				d_matrix_reduceAmount = target->defensiveMatrixHp;
-
-
-			damage -= d_matrix_reduceAmount;
-			target->reduceDefensiveMatrixHp(d_matrix_reduceAmount);
-
+			damage = 0;
+			target->reduceDefensiveMatrixHp(1);
+			if (target->_unused_0x106 > target->defensiveMatrixHp) {
+				target->_unused_0x106 = target->defensiveMatrixHp;
+			}
 		}
 
 		damageType = weapons_dat::DamageType[weaponId];
@@ -122,7 +115,9 @@ void weaponDamageHook(	s32		damage,
 		//Update unit strength data (?)
 		target->airStrength = getUnitStrength(target, false);
 		target->groundStrength = getUnitStrength(target, true);
-
+		if (target->id == UnitId::TerranGoliath) {
+			target->_padding_0x132 = 240; //10 second delay on damage, change value in game_hooks if this changes
+		}
 	}
 
 }

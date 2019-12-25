@@ -30,6 +30,9 @@ bool nextFrame() {
 		if (*elapsedTimeFrames == 0) {
 			//Write your code here
 			//scbw::printText(PLUGIN_NAME ": Hello, world!");
+			for (int i = 0; i < PLAYER_COUNT; i++) {
+				UpgradesSc->maxLevel[i][ScUpgrade::AegisProtection] = 1;
+			}
 		}
 
 		//Loop through all visible units in the game.
@@ -41,6 +44,27 @@ bool nextFrame() {
 			if (*elapsedTimeFrames % 8 == 0 && unit->id != UnitId::TerranStarbase) {
 				unit->unusedTimer = 0;
 			}
+			else if (unit->id == UnitId::TerranGoliath &&
+				     UpgradesSc->currentLevel[unit->playerId][ScUpgrade::AegisProtection] == 1) {
+				if (unit->_unused_0x106 >= 3) {
+					unit->_padding_0x132 = 240; //10 second delay, change value in weapon_damage if this changes
+				} else if (unit->_padding_0x132 <= 0) {
+					if (unit->defensiveMatrixTimer == 0 && unit->defensiveMatrixHp == 0) {
+						unit->sprite->createTopOverlay(ImageId::DefensiveMatrixFront_Small, 0, 0, 0);
+						unit->sprite->createOverlay(ImageId::DefensiveMatrixBack_Small, 0, 0, 0);
+					}
+					unit->defensiveMatrixHp++;
+					if (unit->defensiveMatrixTimer == 0)
+						unit->defensiveMatrixTimer = 168;
+					unit->_unused_0x106++;
+					unit->_padding_0x132 = 240; //10 second delay, change value in weapon_damage if this changes
+				}
+				else {
+					unit->_padding_0x132--;
+				}
+			}
+
+
 			if (unit->id == UnitId::TerranArmory && (unit->status & UnitStatus::Completed)) {
 				hasShieldGen[unit->getLastOwnerId()] = true;
 				shielders.insert(unit);
@@ -60,6 +84,10 @@ bool nextFrame() {
 			for (CUnit* shielder : shielders) {
 				if (hasShieldGen[shielder->getLastOwnerId()] == true) {
 					getShieldableUnits(shielder);
+				}
+				else {
+					shielder->unusedTimer = 0;
+					shielder->sprite->removeOverlay(ImageId::RechargeShields_Medium);
 				}
 			}
 		}
@@ -94,10 +122,10 @@ namespace {
 	void getShieldableUnits(CUnit* shielder) {
 		static u16* const maxBoxRightValue = (u16*)0x00628450;	//should usually be mapTileSize->width * 32
 		static u16* const maxBoxBottomValue = (u16*)0x006284B4;	//should usually be mapTileSize->height * 32
-		static u32 shieldRadius = 8 * 32;
+		static u16 shieldRadius = 8 * 32;
 
 		if (shielder->unusedTimer > 0) {
-			shielder->unusedTimer = 10; //base energy cost same as cloaking
+			shielder->unusedTimer = 1; //base energy cost same as cloaking, final cost is 10 x timer (to avoid overflow in the u8 field)
 			if (*elapsedTimeFrames % 72 == 0) { // every 3 seconds at fastest
 				scbw::playSound(SoundId::Bullet_pshield_wav, shielder);
 			}
@@ -140,7 +168,7 @@ namespace {
 
 					s32 maxShields = (s32)(units_dat::MaxShieldPoints[current_unit->id]) * 256;
 					if (current_unit->shields != maxShields) {
-						shielder->unusedTimer += 10; // 1 energy : 1.4 shield point
+						shielder->unusedTimer++; // 1 energy : 1.4 shield point, final cost is 10 x timer
 					}
 				}
 			}
