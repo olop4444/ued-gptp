@@ -15,7 +15,7 @@ bool canMakePsiField(u16 unitId) {
 bool isReadyToMakePsiField(CUnit* unit) {
   //Default StarCraft behavior
 
-  if (unit->id == UnitId::pylon)
+  if (unit->id == UnitId::pylon && unit->lockdownTimer == 0)
     return true;
 
   return false;

@@ -68,9 +68,6 @@ void orders_Spell(CUnit* unit) {
 		else { //9291A
 
 			u8 techUsed = orders_dat::TechUsed[unit->mainOrderId];
-			if (unit->id == UnitId::TerranStarbase && techUsed == 7) { // 7 is Irradiate
-				techUsed = TechId::DefensiveMatrix;
-			}
 
 			if(techUsed >= TechId::None)
 				spellCost = 0;
@@ -229,25 +226,6 @@ void orders_Spell(CUnit* unit) {
 							if(unit->pAI != NULL)
 								AIScriptController[unit->playerId].spellcasterTimer = 1;
 
-							if (unit->id == UnitId::TerranStarbase && techUsed == TechId::DefensiveMatrix) {
-								unit->mainOrderId = OrderId::Nothing2;
-								//target->defensiveMatrixHp = 64000;
-								target->defensiveMatrixHp = 15;
-								if (target->defensiveMatrixTimer == 0) {
-									u32 frontId = (units_dat::BaseProperty[target->id] & UnitProperty::MediumOverlay) ?
-										ImageId::DefensiveMatrixFront_Medium :
-										(units_dat::BaseProperty[target->id] & UnitProperty::LargeOverlay ?
-											ImageId::DefensiveMatrixFront_Large : ImageId::DefensiveMatrixFront_Small);
-									u32 backId = (units_dat::BaseProperty[target->id] & UnitProperty::MediumOverlay) ?
-										ImageId::DefensiveMatrixBack_Medium :
-										(units_dat::BaseProperty[target->id] & UnitProperty::LargeOverlay ?
-											ImageId::DefensiveMatrixBack_Large : ImageId::DefensiveMatrixBack_Small);
-									target->sprite->createTopOverlay(frontId, 0, 0, 0);
-									target->sprite->createOverlay(backId, 0, 0, 0);
-								}
-								target->defensiveMatrixTimer = 168;
-								scbw::playSound(SoundId::Bullet_tscFir00_wav, unit);
-							}
 						}
 
 					}

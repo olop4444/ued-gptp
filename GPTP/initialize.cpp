@@ -55,6 +55,7 @@
 #include "hooks/orders/enter_nydus.h"
 #include "hooks/utils/ExtendSightLimit.h"
 #include "hooks/orders/spells/feedback_spell.h"
+#include "hooks/orders/spells/defense_matrix.h"
 #include "hooks/give_unit.h"
 #include "hooks/orders/spells/hallucination_spell.h"
 #include "hooks/orders/infestation.h"
@@ -177,7 +178,7 @@ BOOL WINAPI Plugin::InitializePlugin(IMPQDraftServer *lpMPQDraftServer) {
 	//hooks::injectWeaponFireHooks();
 
 	//hooks::injectUnitDestructorSpecial();
-	//hooks::injectPsiFieldHooks();
+	hooks::injectPsiFieldHooks();
 
 	//hooks::injectArmorBonusHook();
 	//hooks::injectSightRangeHook();
@@ -186,8 +187,9 @@ BOOL WINAPI Plugin::InitializePlugin(IMPQDraftServer *lpMPQDraftServer) {
 
 	//hooks::injectUnitTooltipHook();
 
-	////hooks::injectSpellcasterAI();
-	////hooks::injectAI_HarvestHooks();
+	//hooks::injectSpellcasterAI();
+	//hooks::injectAI_HarvestHooks();
+	hooks::injectDefenseMatrixHook();
 
 	return TRUE;
 }
